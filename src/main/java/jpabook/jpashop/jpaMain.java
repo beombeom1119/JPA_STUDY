@@ -1,6 +1,7 @@
 package jpabook.jpashop;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Order;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,7 +18,12 @@ public class jpaMain {
             tx.begin();
 
             try {
+                Order order  = em.find(Order.class, 1L);
+                Long memberId = order.getMemberId();
 
+                // Order.getMember() -> 이런식으로 불러오는 것이 더욱 객체지향적이다.
+
+                tx.commit();
             }catch (Exception e)
             {
                 tx.rollback();
@@ -25,14 +31,6 @@ public class jpaMain {
             finally {
                 em.close();
             }
-
-            Member member = new Member();
-            member.setId(1L);
-            member.setName("HelloA");
-            em.persist(member); /// 이렇게 하면 원래 저장이 된다.
-
-            tx.commit();    //트랜잭션
-
             em.close();
             emf.close();
         }
